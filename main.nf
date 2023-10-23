@@ -2,13 +2,12 @@
 
 nextflow.enable.dsl=2
 
-// DEV: Update this block with a description and the name of the pipeline
 /**
 ===============================
 Pipeline
 ===============================
 
-This Pipeline performs ....
+This Pipeline performs conversion of CRAM to BAM files
 
 ### Homepage / git
 git@github.com:ikmb/pipeline.git
@@ -20,24 +19,19 @@ params.version = workflow.manifest.version
 
 def summary = [:]
 
-run_name = ( params.run_name == false) ? "${workflow.sessionId}" : "${params.run_name}"
-
 WorkflowMain.initialise(workflow, params, log)
 
-// DEV: Rename this and the file under lib/ to something matching this pipeline (e.g. WorkflowExomes)
 WorkflowPipeline.initialise( params, log)
 
-// DEV: Rename this to something matching this pipeline, e.g. "EXOMES"
-include { MAIN } from './workflows/main'
+include { CONVERT_CRAM } from './workflows/convert_cram'
 
 multiqc_report = Channel.from([])
 
 workflow {
 
-    // DEV: Rename to something matching this pipeline (see above)
-    MAIN()
+    CONVERT_CRAM()
 
-    multiqc_report = multiqc_report.mix(MAIN.out.qc).toList()
+    multiqc_report = multiqc_report.mix(CONVERT_CRAM.out.qc).toList()
 }
 
 workflow.onComplete {

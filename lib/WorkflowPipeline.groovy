@@ -10,8 +10,8 @@ class WorkflowPipeline {
     public static void initialise(params, log) {
 
 
-        if (!params.run_name) {
-		log.info  "Must provide a run_name (--run_name)"
+        if (!params.reference) {
+		log.info  "Must provide a reference FASTA file (--reference)"
 	        System.exit(1)
         }
     
